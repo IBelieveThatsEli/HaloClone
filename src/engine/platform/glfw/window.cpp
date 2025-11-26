@@ -157,8 +157,8 @@ void Window::SetWindowMode(Window::Mode mode)
     {
         case Window::Mode::Windowed:
             monitor             = nullptr;
-            width               = m_properties.width;
-            height              = m_properties.height;
+            width               = m_properties.prevWidth;
+            height              = m_properties.prevHeight;
             decorated           = true;
             break;
 
@@ -170,8 +170,8 @@ void Window::SetWindowMode(Window::Mode mode)
             break;
 
         case Window::Mode::Fullscreen:
-            width               = 1920;
-            height              = 1080;
+            width               = m->width;
+            height              = m->height;
             decorated           = true;
             break;
 
@@ -183,4 +183,29 @@ void Window::SetWindowMode(Window::Mode mode)
 
     glfwSetWindowAttrib(m_handle, GLFW_DECORATED, decorated ? GLFW_TRUE : GLFW_FALSE);
     glfwSetWindowMonitor(m_handle, monitor, 0, 0, width, height, 0);
+
+    if (mode == Window::Mode::Windowed || mode == Window::Mode::BorderlessWindow)
+        CenterWindow();
+}
+
+void Window::CenterWindow()
+{
+    if (!m_handle) return;
+
+    GLFWmonitor* monitor = glfwGetPrimaryMonitor();
+    if (!monitor) return;
+
+    int monitorX, monitorY;
+    glfwGetMonitorPos(monitor, &monitorX, &monitorY);
+
+    const GLFWvidmode* mode = glfwGetVideoMode(monitor);
+    if (!mode) return;
+
+    int windowWidth, windowHeight;
+    glfwGetWindowSize(m_handle, &windowWidth, &windowHeight);
+
+    int posX = monitorX + (mode->width - windowWidth) / 2;
+    int posY = monitorY + (mode->height - windowHeight) / 2;
+
+    glfwSetWindowPos(m_handle, posX, posY);
 }

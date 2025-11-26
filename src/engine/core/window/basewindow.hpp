@@ -27,9 +27,11 @@ namespace Core
 
             struct Properties 
             {
-                i32              width  { 800 };
-                i32              height { 600 };
-                std::string_view title  { "Window" };
+                i32              width      { 800 };
+                i32              height     { 600 };
+                i32              prevWidth  { width };
+                i32              prevHeight { height };
+                std::string_view title      { "Window" };
 
                 Mode mode      { Mode::Windowed };
                 
@@ -50,9 +52,7 @@ namespace Core
             };
 
         public:
-            explicit BaseWindow(Properties properties) 
-                : m_properties(properties)
-            {}
+            explicit BaseWindow(Properties properties);
 
             virtual ~BaseWindow() = default;
 

@@ -35,8 +35,15 @@ int main()
         SDL3::Window window(properties);
 
         Input::Manager man;
-        man.EnableKeyboard(std::make_unique<Input::Keyboard>(std::initializer_list{Input::Key::Escape, Input::Key::F}));
+        man.EnableKeyboard(std::make_unique<Input::Keyboard>(std::initializer_list{
+            Input::Key::Escape, 
+            Input::Key::F,
+            Input::Key::W
+        }));
         man.EnableMouse(std::make_unique<Input::Mouse>(std::initializer_list{Input::MouseButton::Left}));
+
+        static bool toggleFullscreen = false;
+        static bool toggleMode = false;
 
         while (window.IsOpen())
         {
@@ -46,6 +53,67 @@ int main()
             {
                 if (keyboard->IsButtonDown(Input::Key::Escape))
                     window.Close();
+
+                if (keyboard->IsButtonDown(Input::Key::F))
+                {
+                    toggleFullscreen = !toggleFullscreen;
+                    if (toggleFullscreen)
+                    {
+                        if (toggleMode)
+                        {
+                            std::print("Toggled Fullscreen borderless\n");
+                            window.SetWindowMode(Core::BaseWindow::Mode::FullscreenBorderless);
+                        }
+                        else
+                        {
+                            std::print("Toggled Fullscreen\n");
+                            window.SetWindowMode(Core::BaseWindow::Mode::Fullscreen);
+                        }
+                    }
+                    else
+                    {
+                        if (toggleMode)
+                        {
+                            std::print("Toggled Window Borderless\n");
+                            window.SetWindowMode(Core::BaseWindow::Mode::BorderlessWindow);
+                        }
+                        else
+                        {
+                            std::print("Toggled Window\n");
+                            window.SetWindowMode(Core::BaseWindow::Mode::Windowed);
+                        }
+                    }
+                }
+                else if (keyboard->IsButtonDown(Input::Key::W))
+                {
+                    toggleMode = !toggleMode;
+                    if (toggleFullscreen)
+                    {
+                        if (toggleMode)
+                        {
+                            std::print("Toggled Fullscreen borderless\n");
+                            window.SetWindowMode(Core::BaseWindow::Mode::FullscreenBorderless);
+                        }
+                        else
+                        {
+                            std::print("Toggled Fullscreen\n");
+                            window.SetWindowMode(Core::BaseWindow::Mode::Fullscreen);
+                        }
+                    }
+                    else
+                    {
+                        if (toggleMode)
+                        {
+                            std::print("Toggled Window Borderless\n");
+                            window.SetWindowMode(Core::BaseWindow::Mode::BorderlessWindow);
+                        }
+                        else
+                        {
+                            std::print("Toggled Window\n");
+                            window.SetWindowMode(Core::BaseWindow::Mode::Windowed);
+                        }
+                    }
+                }
             }
 
             if (auto mouse = man.GetMouse(); mouse)
@@ -72,53 +140,122 @@ int main()
         }
 
         SDL_Quit();
-        /*glfwInit();
+        // glfwInit();
 
-        Core::BaseWindow::Properties properties {};
-        GLFW::Window window(properties);
+        // Core::BaseWindow::Properties properties {};
+        // properties.mode = Core::BaseWindow::Mode::Windowed;
+        // GLFW::Window window(properties);
 
-        for (auto& func : window.GetFramebufferCallbacks()) 
-            Core::EventBus::GetInstance()
-                .AddFramebufferListener(
-                        [func](i32 x, i32 y) { 
-                            func(x, y); 
-                        }
-                );
+        // for (auto& func : window.GetFramebufferCallbacks()) 
+        //     Core::EventBus::GetInstance()
+        //         .AddFramebufferListener(
+        //                 [func](i32 x, i32 y) { 
+        //                     func(x, y); 
+        //                 }
+        //         );
 
-        Core::EventBus::GetInstance()
-            .AddFramebufferListener(
-                    [](i32 x, i32 y) {
-                        std::print("{}x{}\n", x, y);
-                    }
-            );
+        // Core::EventBus::GetInstance()
+        //     .AddFramebufferListener(
+        //             [](i32 x, i32 y) {
+        //                 std::print("{}x{}\n", x, y);
+        //             }
+        //     );
 
-        Input::Manager man;
-        man.EnableKeyboard(std::make_unique<Input::Keyboard>(std::initializer_list{Input::Key::Escape}));
-        man.EnableMouse(std::make_unique<Input::Mouse>(std::initializer_list{Input::MouseButton::Left}));
+        // Input::Manager man;
+        // man.EnableKeyboard(std::make_unique<Input::Keyboard>(std::initializer_list{
+        //     Input::Key::Escape,
+        //     Input::Key::F,
+        //     Input::Key::W
+        // }));
+        // man.EnableMouse(std::make_unique<Input::Mouse>(std::initializer_list{Input::MouseButton::Left}));
 
-        GLFW::EventBridge eventbridge;
-        eventbridge.SetupCallbacks(window.GetHandle());
+        // GLFW::EventBridge eventbridge;
+        // eventbridge.SetupCallbacks(window.GetHandle());
 
-        while (window.IsOpen())
-        {
-            window.PollEvents();
+        // static bool toggleFullscreen = false;
+        // static bool toggleMode = false;
 
-            if (man.GetMouse()->IsButtonDown(Input::MouseButton::Left))
-                std::print("Left Mouse Button\n");
+        // while (window.IsOpen())
+        // {
+        //     window.PollEvents();
 
-            if (auto res = man.GetGamepad(); res && res->buttons.IsButtonDown(Input::GamepadButton::A))
-                std::print("A\n");
+        //     if (man.GetMouse()->IsButtonDown(Input::MouseButton::Left))
+        //         std::print("Left Mouse Button\n");
 
-            if (auto res = man.GetKeyboard(); res && res->IsButtonDown(Input::Key::Escape))
-            {
-                std::print("escape\n");
-                window.Close();
-            }
+        //     if (auto res = man.GetGamepad(); res && res->buttons.IsButtonDown(Input::GamepadButton::A))
+        //         std::print("A\n");
 
-            man.Update(0);
+        //     if (auto res = man.GetKeyboard(); res)
+        //     {
+        //         if (res->IsButtonDown(Input::Key::Escape))
+        //             window.Close();
 
-            eventbridge.UpdateGamepads();
-        }*/
+        //         if (res->IsButtonDown(Input::Key::F))
+        //         {
+        //             toggleFullscreen = !toggleFullscreen;
+        //             if (toggleFullscreen)
+        //             {
+        //                 if (toggleMode)
+        //                 {
+        //                     std::print("Toggled Fullscreen borderless\n");
+        //                     window.SetWindowMode(Core::BaseWindow::Mode::FullscreenBorderless);
+        //                 }
+        //                 else
+        //                 {
+        //                     std::print("Toggled Fullscreen\n");
+        //                     window.SetWindowMode(Core::BaseWindow::Mode::Fullscreen);
+        //                 }
+        //             }
+        //             else
+        //             {
+        //                 if (toggleMode)
+        //                 {
+        //                     std::print("Toggled Window Borderless\n");
+        //                     window.SetWindowMode(Core::BaseWindow::Mode::BorderlessWindow);
+        //                 }
+        //                 else
+        //                 {
+        //                     std::print("Toggled Window\n");
+        //                     window.SetWindowMode(Core::BaseWindow::Mode::Windowed);
+        //                 }
+        //             }
+        //         }
+        //         else if (res->IsButtonDown(Input::Key::W))
+        //         {
+        //             toggleMode = !toggleMode;
+        //             if (toggleFullscreen)
+        //             {
+        //                 if (toggleMode)
+        //                 {
+        //                     std::print("Toggled Fullscreen borderless\n");
+        //                     window.SetWindowMode(Core::BaseWindow::Mode::FullscreenBorderless);
+        //                 }
+        //                 else
+        //                 {
+        //                     std::print("Toggled Fullscreen\n");
+        //                     window.SetWindowMode(Core::BaseWindow::Mode::Fullscreen);
+        //                 }
+        //             }
+        //             else
+        //             {
+        //                 if (toggleMode)
+        //                 {
+        //                     std::print("Toggled Window Borderless\n");
+        //                     window.SetWindowMode(Core::BaseWindow::Mode::BorderlessWindow);
+        //                 }
+        //                 else
+        //                 {
+        //                     std::print("Toggled Window\n");
+        //                     window.SetWindowMode(Core::BaseWindow::Mode::Windowed);
+        //                 }
+        //             }
+        //         }
+        //     }
+
+        //     man.Update(0);
+
+        //     eventbridge.UpdateGamepads();
+        // }
     }
     catch (std::exception& e)
     {

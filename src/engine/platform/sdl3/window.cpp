@@ -159,7 +159,7 @@ void Window::SetWindowMode(Mode mode)
         case Window::Mode::Windowed:
             SDL_SetWindowFullscreen(m_handle, 0); // remove fullscreen
             SDL_SetWindowBordered(m_handle, true);
-            SDL_SetWindowSize(m_handle, width, height);
+            SDL_SetWindowSize(m_handle, m_properties.prevWidth, m_properties.prevHeight);
             break;
 
         case Window::Mode::BorderlessWindow:

@@ -39,5 +39,7 @@ namespace GLFW
      
             private:
             GLFWwindow* m_handle { nullptr };
+
+            void CenterWindow();
     };
 } // GLFW
