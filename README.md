@@ -11,5 +11,5 @@ Hopefully development will be smooth.
 
 [7 Dec, 2025]
 I somehow implemented methods for wrapping a scene described in a json file to a scene class instance.
-The scene class requests the meshlibrary to store mesh data (to the cpu). mesh data is extracted using tinygltf and meshlibray prevents mesh instance duplicates.
+The scene class requests the meshlibrary to store mesh data (not visible to the gpu). mesh data is extracted using tinygltf and meshlibray prevents mesh instance duplicates.
 Alot of spegheti, and copies from chatbot.
