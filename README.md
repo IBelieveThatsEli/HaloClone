@@ -8,3 +8,8 @@ However, currently the project only has entities and methods for windowing and h
 For the heck of it I use SDL3 and GLFW window/input apis.
 
 Hopefully development will be smooth.
+
+[7 Dec, 2025]
+I somehow implemented methods for wrapping a scene described in a json file to a scene class instance.
+The scene class requests the meshlibrary to store mesh data (to the cpu). mesh data is extracted using tinygltf and meshlibray prevents mesh instance duplicates.
+Alot of spegheti, and copies from chatbot.
