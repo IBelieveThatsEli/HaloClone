@@ -3,6 +3,7 @@
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_video.h>
+#include <format>
 #include <print>
 #include <stdexcept>
 
@@ -11,6 +12,9 @@ using namespace SDL3;
 Window::Window(Properties& properties)
     : BaseWindow(properties)
 {
+    if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD))
+        throw std::runtime_error(std::format("SDL_Init failed: {}", SDL_GetError()));
+
     u32 flags = 0;
 
     if (m_properties.resizable)
@@ -54,6 +58,8 @@ Window::~Window()
         SDL_DestroyWindow(m_handle);
         m_handle = nullptr;
     }
+
+    SDL_Quit();
 }
 
 void Window::PollEvents()

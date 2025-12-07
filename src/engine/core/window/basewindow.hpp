@@ -1,6 +1,7 @@
 #pragma once
 
 #include "utils/types.hpp"
+#include "core/api/api.hpp"
 
 #include <string_view>
 #include <vector>
@@ -11,12 +12,6 @@ namespace Core
     class BaseWindow
     {
         public:
-            enum class GraphicsAPI : u8
-            {
-                OpenGL, 
-                Vulkan
-            };
-
             enum class Mode : u8
             {
                 Windowed, 

@@ -1,0 +1,16 @@
+{
+    "entities": [
+        {
+            "name": "Triangle",
+            "components": {
+                "Transform": {
+                    "position": [0, 0, 0]
+                },
+                "Mesh": {
+                    "file": "src/projects/hello_triangle/assets/triangle.glb",
+                    "submesh": 0
+                }
+            }
+        }
+    ]
+}

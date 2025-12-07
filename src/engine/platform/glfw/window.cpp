@@ -13,6 +13,9 @@ static i32 ConvertToGLFWBoolean(bool flag)
 Window::Window(Properties& properties)
     : BaseWindow(properties) 
 {
+    if (!glfwInit())
+        throw std::runtime_error("Failed to initialize glfw");
+
     glfwWindowHint(GLFW_RESIZABLE,                m_properties.resizable       ? GLFW_TRUE : GLFW_FALSE);
     glfwWindowHint(GLFW_VISIBLE,                  m_properties.visible         ? GLFW_TRUE : GLFW_FALSE);
     glfwWindowHint(GLFW_FOCUSED,                  m_properties.focused         ? GLFW_TRUE : GLFW_FALSE);
@@ -40,6 +43,7 @@ Window::~Window()
         glfwDestroyWindow(m_handle);
         m_handle = nullptr;
     }
+    glfwTerminate();
 }
 
 bool Window::IsOpen() const

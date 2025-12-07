@@ -8,9 +8,18 @@ target_link_libraries(${PROJECT_NAME}
     PUBLIC
         glfw
         SDL3::SDL3
+        OpenGL::GL
+        Vulkan::Vulkan
+        glad
+        volk
+        glm
+        nlohmann_json::nlohmann_json
 )
 
 target_include_directories(${PROJECT_NAME}
     PUBLIC
         ${CMAKE_CURRENT_SOURCE_DIR}
+        ${nuklear_SOURCE_DIR}
+        ${entt_SOURCE_DIR}/src
+        ${tinygltf_SOURCE_DIR}
 )
