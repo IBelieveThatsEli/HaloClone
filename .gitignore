@@ -6,4 +6,4 @@ build/
 *.exe
 *.log
 .cache/
-
+*.swp

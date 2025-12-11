@@ -2,7 +2,7 @@
 
 #include "renderer/irenderer.hpp"
 
-namespace OpenGL
+namespace Renderer::OpenGL
 {
     class Renderer : public IRenderer
     {
