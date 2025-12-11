@@ -5,16 +5,16 @@
 namespace Assets
 {
     template<typename T>
-    struct Handle
+    struct MeshHandle
     {
         u32 id = 0;
         
-        bool operator==(const Handle& other) const 
+        bool operator==(const MeshHandle& other) const 
         {
             return id == other.id;
         }
 
-        Handle& operator=(const Handle& other)
+        MeshHandle& operator=(const MeshHandle& other)
         {
             if (this != &other)
                 id = other.id;
@@ -29,9 +29,9 @@ namespace Assets
 namespace std 
 {
     template<typename T>
-    struct hash<Assets::Handle<T>> 
+    struct hash<Assets::MeshHandle<T>> 
     {
-        size_t operator()(const Assets::Handle<T>& h) const noexcept 
+        size_t operator()(const Assets::MeshHandle<T>& h) const noexcept 
         {
             return std::hash<uint64_t>()(h.id);
         }

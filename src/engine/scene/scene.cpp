@@ -1,7 +1,6 @@
 #include "scene.hpp"
 
 #include "scene/components/tag.hpp"
-#include "scene/components/transform.hpp"
 
 namespace Scene
 {
@@ -15,7 +14,6 @@ namespace Scene
         Entity entity = Entity{ e, &m_registry };
 
         entity.AddComponent<Components::Tag>(name);
-        //entity.AddComponent<Components::Transform>();
 
         return entity;
     }

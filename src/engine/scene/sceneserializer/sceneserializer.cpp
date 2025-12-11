@@ -75,11 +75,13 @@ bool SceneSerializer::Deserialize(Scene &scene, std::string_view path)
             std::string file = j["file"];
             i32 submesh = j.value("submesh", 0);
 
-            Assets::Handle<Assets::Mesh> handle = Assets::MeshLibrary::GetInstance().LoadMesh(file);
-            mesh.mesh = handle; 
+            u32 handleID = Assets::MeshLibrary::Get().LoadMesh(file);
+            mesh.meshID = handleID; 
             mesh.submeshIndex = submesh;
         }
     }
+
+    file.close();
 
     return true;
 }

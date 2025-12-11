@@ -2,6 +2,7 @@
 
 #include "utils/types.hpp"
 #include "core/api/api.hpp"
+#include "renderer/irenderer.hpp"
 
 #include <memory>
 
@@ -24,6 +25,9 @@ namespace Core
 
         private:
             Core::GraphicsAPI m_graphicsAPI;
+
+            std::unique_ptr<IRenderer> m_renderer;
+
             std::shared_ptr<Scene::Scene> m_activeScene;
 
     };

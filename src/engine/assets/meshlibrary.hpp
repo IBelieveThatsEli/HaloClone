@@ -1,75 +1,33 @@
 #pragma once
 
-#include "assets/handle.hpp"
 #include "assets/mesh.hpp"
 
-#include <atomic>
 #include <functional>
-#include <memory>
+#include <string_view>
 
 namespace Assets
-{   
-    using MeshHandle = Handle<Mesh>;
-
-    class MeshLibrary 
+{
+    class MeshLibrary
     {
         public:
-            static MeshLibrary& GetInstance();
+            using LoaderFunc = std::function<Mesh(std::string_view)>;
 
-            using MeshPtr = std::shared_ptr<Mesh>;
-
-            using LoaderFunc = std::function<Mesh(std::string_view path)>;
-
-            using GPUUploadFunc = std::function<void(MeshHandle, const Mesh&)>;
-            using GPUDestroyFunc = std::function<void(MeshHandle)>;
-
-            MeshLibrary();
-            ~MeshLibrary();
-
-            MeshLibrary(const MeshLibrary&) = delete;
-            MeshLibrary& operator=(const MeshLibrary&) = delete;
+            static MeshLibrary& Get();
 
             void SetLoader(LoaderFunc loader);
 
-            void SetGPUUploadCallback(GPUUploadFunc uploadCb);
-            void SetGPUDestroyCallback(GPUDestroyFunc destroyCb);
+            u32 LoadMesh(std::string_view path);
 
-            MeshHandle LoadMesh(std::string_view path);
-
-            MeshHandle GetHandleForPath(std::string_view path) const;
-
-            MeshPtr Get(MeshHandle handle) const;
-
-            void Release(MeshHandle handle);
-
-            bool Exists(MeshHandle handle) const;
-
-            void ClearUnused();
-
-            void ClearAll();
+            void Clear();
 
         private:
-            struct Entry 
-            {
-                MeshPtr mesh;
-                u32 refCount = 0;
-                std::string_view path;
-            };
+            MeshLibrary();
 
-            MeshHandle CreateHandle();
-            void DestroyEntryInternal(MeshHandle handle);
+            std::unordered_map<u32, Mesh> m_meshes;
+            std::unordered_map<std::string_view, u32> m_pathToID;
 
-        private:
-            mutable std::mutex m_mutex;
+            LoaderFunc m_loaderFunc = nullptr;
 
-            std::unordered_map<std::string_view, MeshHandle> m_pathToHandle;
-            std::unordered_map<MeshHandle, Entry> m_entries;
-
-            std::atomic<u32> m_nextId;
-
-            LoaderFunc      m_loader        = nullptr;
-            GPUUploadFunc   m_gpuUpload     = nullptr;
-            GPUDestroyFunc  m_gpuDestroy    = nullptr;
+            u32 m_lastID = 0;
     };
-
-} // namespace Assets
+} // Assets

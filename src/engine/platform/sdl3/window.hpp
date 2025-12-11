@@ -1,6 +1,6 @@
 #pragma once
 
-#include "core/window/basewindow.hpp"
+#include "platform/basewindow/basewindow.hpp"
 #include "utils/types.hpp"
 
 #include <string_view>

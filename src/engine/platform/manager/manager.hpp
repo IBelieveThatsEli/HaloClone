@@ -1,7 +1,7 @@
 #pragma once
 
 #include "core/api/api.hpp"
-#include "core/window/basewindow.hpp"
+#include "platform/basewindow/basewindow.hpp"
 
 #include <memory>
 

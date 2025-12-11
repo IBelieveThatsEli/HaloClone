@@ -34,6 +34,14 @@ Window::Window(Properties& properties)
 
     SetVSync(m_properties.vsync);
     SetWindowMode(m_properties.mode);
+
+    if (m_properties.graphicsAPI == Core::GraphicsAPI::OpenGL)
+    {
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, m_properties.glMajorVersion);
+        glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, m_properties.glMinorVersion);
+
+        glfwMakeContextCurrent(m_handle);
+    }
 }
 
 Window::~Window()

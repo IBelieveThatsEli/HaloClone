@@ -3,7 +3,7 @@
 #include <string_view>
 
 #include "utils/types.hpp"
-#include "core/window/basewindow.hpp"
+#include "platform/basewindow/basewindow.hpp"
 
 struct GLFWwindow;
 
