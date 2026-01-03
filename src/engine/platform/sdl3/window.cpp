@@ -1,20 +1,33 @@
 #include "window.hpp"
+#include "core/api/api.hpp"
 #include "platform/sdl3/eventbridge.hpp"
 
 #include <SDL3/SDL.h>
 #include <SDL3/SDL_video.h>
+#include <glad/glad.h>
+#include <volk.h>
 #include <format>
-#include <print>
 #include <stdexcept>
 
 using namespace SDL3;
 
-Window::Window(Properties& properties)
+Window::Window(const Properties& properties)
     : BaseWindow(properties)
+{
+    CreateWindow();
+}
+
+Window::~Window()
+{
+    DestroyWindow();
+    SDL_Quit();
+}
+
+void Window::CreateWindow()
 {
     if (!SDL_Init(SDL_INIT_VIDEO | SDL_INIT_GAMEPAD))
         throw std::runtime_error(std::format("SDL_Init failed: {}", SDL_GetError()));
-
+     
     u32 flags = 0;
 
     if (m_properties.resizable)
@@ -49,19 +62,28 @@ Window::Window(Properties& properties)
     SetWindowMode(m_properties.mode);
 
     SetVSync(m_properties.vsync);
+
+    if (m_properties.graphicsAPI == Core::GraphicsAPI::OpenGL)
+    {
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, m_properties.glMajorVersion);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, m_properties.glMinorVersion);
+        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+
+        SDL_GLContext glContext = SDL_GL_CreateContext(m_handle);
+        if (!glContext)
+            throw std::runtime_error(std::format("SDL_GL_CreateContext failed: {}\n", SDL_GetError()));
+        SDL_GL_MakeCurrent(m_handle, glContext);
+    }
 }
 
-Window::~Window()
+void Window::DestroyWindow()
 {
     if (m_handle)
     {
         SDL_DestroyWindow(m_handle);
         m_handle = nullptr;
     }
-
-    SDL_Quit();
 }
-
 void Window::PollEvents()
 {
     SDL_Event event;
@@ -103,6 +125,14 @@ void Window::SetTitle(std::string_view title)
 {
     m_properties.title = title;
     SDL_SetWindowTitle(m_handle, m_properties.title.data());
+}
+
+void Window::ChangeGraphicsAPI(const Core::GraphicsAPI& api)
+{
+    m_properties.graphicsAPI = api;
+
+    DestroyWindow();
+    CreateWindow();
 }
 
 void Window::SetResizable(bool flag)
@@ -184,3 +214,15 @@ void Window::SetWindowMode(Mode mode)
             break;
     }
 }
+
+bool Window::InitGLAD() noexcept
+{
+    return gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
+}
+
+bool Window::CreateVKWindowSurface() noexcept
+{
+
+}
+
+

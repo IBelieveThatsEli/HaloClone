@@ -6,13 +6,14 @@
 #include <string_view>
 
 struct SDL_Window;
+struct SDL_GLContext;
 
 namespace SDL3
 {
     class Window : public Core::BaseWindow
     {
         public:
-            Window(Properties& properties);
+            Window(const Properties& properties);
             ~Window() override;
 
             bool IsOpen() const override;
@@ -25,6 +26,8 @@ namespace SDL3
             void SetHeight(i32 height) override;
             void SetTitle (std::string_view title) override;
 
+            void ChangeGraphicsAPI(const Core::GraphicsAPI& api) override;
+
             [[nodiscard]] SDL_Window* GetHandle() noexcept { return m_handle; }
 
             void SetResizable     (bool flag) override;
@@ -36,6 +39,13 @@ namespace SDL3
             void SetTransparent   (bool flag) override;
             void SetVSync         (bool flag) override;
             void SetWindowMode    (Mode mode) override;
+
+            bool InitGLAD() noexcept override;
+            bool CreateVKWindowSurface() noexcept override;
+
+        protected:
+            void CreateWindow() override;
+            void DestroyWindow() override;
 
         private:
             SDL_Window* m_handle {nullptr};

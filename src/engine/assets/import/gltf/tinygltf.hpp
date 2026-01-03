@@ -8,7 +8,7 @@
 #include <stdexcept>
 #include <tiny_gltf.h>
 
-#include "assets/mesh.hpp"
+#include "assets/core/mesh.hpp"
 
 namespace Assets::Loaders
 {

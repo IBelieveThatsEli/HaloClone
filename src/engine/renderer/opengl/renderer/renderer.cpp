@@ -5,7 +5,7 @@
 
 #include <stdexcept>
 
-using namespace Renderer::OpenGL;
+using namespace OpenGL;
 
 Renderer::Renderer()
 {

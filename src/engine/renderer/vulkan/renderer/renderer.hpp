@@ -2,7 +2,7 @@
 
 #include "renderer/irenderer.hpp"
 
-namespace OpenGL
+namespace Vulkan 
 {
     class Renderer : public IRenderer
     {

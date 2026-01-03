@@ -4,7 +4,7 @@
 
 using namespace Core;
 
-BaseWindow::BaseWindow(Properties properties) 
+BaseWindow::BaseWindow(const Properties& properties) 
     : m_properties(properties)
 {
     for (auto& func : m_framebufferCallbacks)

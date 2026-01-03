@@ -1,6 +1,6 @@
 #include "meshlibrary.hpp"
 
-#include "assets/loaders/tinygltf.hpp"
+#include "assets/import/gltf/tinygltf.hpp"
 
 #include <stdexcept>
 

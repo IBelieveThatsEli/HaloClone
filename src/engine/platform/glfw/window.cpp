@@ -1,17 +1,28 @@
 #include "window.hpp"
 
+#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <volk.h>
+
 #include <stdexcept>
 
 using namespace GLFW;
 
-static i32 ConvertToGLFWBoolean(bool flag)
+static i32 ConvertToGLFWBoolean(bool flag) { return flag ? GLFW_TRUE : GLFW_FALSE; }
+
+Window::Window(const Properties& properties)
+    : BaseWindow(properties) 
 {
-    return flag ? GLFW_TRUE : GLFW_FALSE;
+   CreateWindow(); 
 }
 
-Window::Window(Properties& properties)
-    : BaseWindow(properties) 
+Window::~Window()
+{
+    DestroyWindow();
+    glfwTerminate();
+}
+
+void Window::CreateWindow()
 {
     if (!glfwInit())
         throw std::runtime_error("Failed to initialize glfw");
@@ -44,14 +55,13 @@ Window::Window(Properties& properties)
     }
 }
 
-Window::~Window()
+void Window::DestroyWindow()
 {
     if (m_handle)
     {
         glfwDestroyWindow(m_handle);
         m_handle = nullptr;
     }
-    glfwTerminate();
 }
 
 bool Window::IsOpen() const
@@ -99,6 +109,14 @@ void Window::SetTitle (std::string_view title)
     m_properties.title = title;
 
     glfwSetWindowTitle(m_handle, m_properties.title.data());
+}
+
+void Window::ChangeGraphicsAPI(const Core::GraphicsAPI& api)
+{
+    m_properties.graphicsAPI = api;
+
+    DestroyWindow();
+    CreateWindow();
 }
 
 void Window::SetResizable(bool flag)
@@ -198,6 +216,16 @@ void Window::SetWindowMode(Window::Mode mode)
 
     if (mode == Window::Mode::Windowed || mode == Window::Mode::BorderlessWindow)
         CenterWindow();
+}
+
+bool Window::InitGLAD() noexcept
+{
+    return gladLoadGLLoader((GLADloadproc)glfwGetProcAddress);
+}
+
+bool Window::CreateVKWindowSurface() noexcept
+{
+
 }
 
 void Window::CenterWindow()

@@ -5,7 +5,9 @@
 
 using namespace Platform;
 
-void Manager::Create(Core::WindowAPI api, Core::BaseWindow::Properties props)
+void Manager::Create(
+        const Core::WindowAPI& api, 
+        const Core::BaseWindow::Properties& props)
 {
     m_api = api;
 
@@ -18,4 +20,9 @@ void Manager::Create(Core::WindowAPI api, Core::BaseWindow::Properties props)
             m_window = std::make_unique<GLFW::Window>(props);
             break;
     }
+    }
+
+void Manager::ChangeGraphicsAPI(const Core::GraphicsAPI& api)
+{
+    m_window->ChangeGraphicsAPI(api);
 }

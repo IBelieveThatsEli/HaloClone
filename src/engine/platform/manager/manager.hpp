@@ -10,7 +10,11 @@ namespace Platform
     class Manager
     {
         public:
-            void Create(Core::WindowAPI api, Core::BaseWindow::Properties props);
+            void Create(
+                    const Core::WindowAPI& api, 
+                    const Core::BaseWindow::Properties& props);
+
+            void ChangeGraphicsAPI(const Core::GraphicsAPI& api);
 
             [[nodiscard]] Core::BaseWindow* GetWindow() noexcept { return m_window.get(); }
 

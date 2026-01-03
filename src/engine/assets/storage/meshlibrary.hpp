@@ -1,6 +1,6 @@
 #pragma once
 
-#include "assets/mesh.hpp"
+#include "assets/core/mesh.hpp"
 
 #include <functional>
 #include <string_view>

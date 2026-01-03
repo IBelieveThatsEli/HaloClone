@@ -12,7 +12,7 @@ namespace GLFW
     class Window : public Core::BaseWindow
     {
         public:
-            Window(Properties& propeties);
+            Window(const Properties& propeties);
             ~Window() override;
 
             bool IsOpen() const override;
@@ -25,6 +25,8 @@ namespace GLFW
             void SetHeight(i32 height) override;
             void SetTitle (std::string_view title) override;
 
+            void ChangeGraphicsAPI(const Core::GraphicsAPI& api) override;
+
             [[nodiscard]] GLFWwindow* GetHandle() noexcept { return m_handle; }
 
             void SetResizable     (bool flag) override;
@@ -36,8 +38,15 @@ namespace GLFW
             void SetTransparent   (bool flag) override;
             void SetVSync         (bool flag) override;
             void SetWindowMode    (Mode mode) override;
-     
-            private:
+
+            bool InitGLAD() noexcept override;
+            bool CreateVKWindowSurface() noexcept override;
+    
+        protected:
+            void CreateWindow() override;
+            void DestroyWindow() override;
+
+        private:
             GLFWwindow* m_handle { nullptr };
 
             void CenterWindow();

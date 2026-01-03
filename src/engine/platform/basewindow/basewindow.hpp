@@ -47,7 +47,7 @@ namespace Core
             };
 
         public:
-            explicit BaseWindow(Properties properties);
+            explicit BaseWindow(const Properties& properties);
 
             virtual ~BaseWindow() = default;
 
@@ -60,6 +60,8 @@ namespace Core
             virtual void SetWidth (i32 width) = 0;
             virtual void SetHeight(i32 height) = 0;
             virtual void SetTitle (std::string_view title) = 0;
+
+            virtual void ChangeGraphicsAPI(const Core::GraphicsAPI& api) = 0;
 
             [[nodiscard]] i32                 GetWidth () const noexcept { return m_properties.width;  }
             [[nodiscard]] i32                 GetHeight() const noexcept { return m_properties.height; }
@@ -84,6 +86,8 @@ namespace Core
             [[nodiscard]] bool IsTransparent    () const { return m_properties.transparent;      }
             [[nodiscard]] bool IsVSyncEnable    () const { return m_properties.vsync;            }
 
+            [[nodiscard]] const Properties& GetProperties() const noexcept { return m_properties; }
+
             void AddFramebufferCallback(std::function<void(i32, i32)>&& func);
             void AddCloseCallback      (std::function<void(        )>&& func);
             void AddFocusCallback      (std::function<void(bool    )>&& func);
@@ -92,7 +96,13 @@ namespace Core
             [[nodiscard]] std::vector<std::function<void(        )>>& GetCloseCallbacks      () noexcept { return m_closeCallbacks;       }
             [[nodiscard]] std::vector<std::function<void(bool    )>>& GetFocusCallbacks      () noexcept { return m_focusCallbacks;       }
 
+            [[nodiscard]] virtual bool InitGLAD() noexcept = 0;
+            [[nodiscard]] virtual bool CreateVKWindowSurface() noexcept = 0;
+
         protected:
+            virtual void CreateWindow() = 0;
+            virtual void DestroyWindow() = 0;
+
             Properties m_properties {};
             bool m_isOpen { true };
 

@@ -4,13 +4,17 @@
 #include "core/engine/engine.hpp"
 #include "scene/scene.hpp"
 #include "scene/sceneserializer/sceneserializer.hpp"
+
 #include <format>
 
 using namespace Engine;
 
-Application::Application(Core::GraphicsAPI graphicsAPI, Core::WindowAPI windowAPI)
+Application::Application(
+        const Core::GraphicsAPI&& graphicsAPI, 
+        const Core::WindowAPI&& windowAPI)
 {
-    m_platformManager.Create(windowAPI, Core::BaseWindow::Properties { .graphicsAPI = graphicsAPI });
+    Core::BaseWindow::Properties props = Core::BaseWindow::Properties { .graphicsAPI = graphicsAPI };
+    m_platformManager.Create(windowAPI, props);
 
     m_engine = std::make_unique<Core::Engine>(graphicsAPI);
 }
@@ -22,6 +26,19 @@ Application::~Application()
         m_engine.reset();
         m_engine = nullptr;
     }
+}
+
+void Application::ChangeWindowAPI(const Core::WindowAPI&& api)
+{
+    // Want to keep the previous state of the window when changing api's.
+    const Core::BaseWindow::Properties& prevProperties = m_platformManager.GetWindow()->GetProperties();
+
+    m_platformManager.Create(api, prevProperties);
+}
+
+void Application::ChangeGraphicsAPI(const Core::GraphicsAPI&& api)
+{
+    m_platformManager.ChangeGraphicsAPI(api);
 }
 
 void Application::LoadScene(std::string_view path)

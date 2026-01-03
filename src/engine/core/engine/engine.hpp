@@ -2,9 +2,10 @@
 
 #include "utils/types.hpp"
 #include "core/api/api.hpp"
-#include "renderer/irenderer.hpp"
 
 #include <memory>
+
+class IRenderer;
 
 namespace Scene
 {
@@ -16,9 +17,11 @@ namespace Core
     class Engine
     {
         public:
-            Engine(Core::GraphicsAPI);
+            Engine(const Core::GraphicsAPI& api);
             ~Engine();
-            
+           
+            void SetGraphicsAPI(const Core::GraphicsAPI& api);
+
             void Update(f32 dt);
 
             void SetScene(std::shared_ptr<Scene::Scene> scene);

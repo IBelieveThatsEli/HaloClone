@@ -2,7 +2,6 @@
 
 #include <memory>
 
-//#include "core/api/api.hpp"
 #include "platform/manager/manager.hpp"
 
 namespace Core 
@@ -16,10 +15,13 @@ namespace Engine
     {
         public:
             Application(
-                    Core::GraphicsAPI = Core::GraphicsAPI::OpenGL, 
-                    Core::WindowAPI   = Core::WindowAPI::GLFW
+                    const Core::GraphicsAPI&& = Core::GraphicsAPI::OpenGL, 
+                    const Core::WindowAPI&&   = Core::WindowAPI::GLFW
             );
             ~Application();
+
+            void ChangeWindowAPI(const Core::WindowAPI&& api);
+            void ChangeGraphicsAPI(const Core::GraphicsAPI&& api);
 
             void LoadScene(std::string_view path);
 
@@ -27,6 +29,7 @@ namespace Engine
 
         private:
             Platform::Manager m_platformManager;
+
             std::unique_ptr<Core::Engine> m_engine;
     };
 } // Engine

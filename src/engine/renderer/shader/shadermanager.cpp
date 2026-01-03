@@ -1,7 +1,5 @@
 #include "shadermanager.hpp"
 
-#include <stdexcept>
-
 using namespace Renderer;
 
 Shader* ShaderManager::GetShader(std::string_view name) const noexcept 
@@ -10,7 +8,7 @@ Shader* ShaderManager::GetShader(std::string_view name) const noexcept
     return (it != m_shaders.end()) ? it->second.get() : nullptr;
 }
 
-bool ShaderManager::GeloadShader(std::string_view name) const noexcept
+bool ShaderManager::ReloadShader(std::string_view name) const noexcept
 {
     Shader* shader = GetShader(name);
     if (!shader) 
@@ -20,6 +18,6 @@ bool ShaderManager::GeloadShader(std::string_view name) const noexcept
 
 void ShaderManager::ReloadAll()
 {
-    for (auto& [name, shader] : m_shaders)
-        shader.LoadFromFile();
+    for (auto& [name, _] : m_shaders)
+        bool res = ReloadShader(name);
 }
