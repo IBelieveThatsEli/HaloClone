@@ -1,13 +1,13 @@
 #include "manager.hpp"
 
-#include "core/events/eventbus.hpp"
+#include "runtime/events/eventbus.hpp"
 #include <print>
 
 using namespace Input;
 
 Manager::Manager()
 {
-    Core::EventBus::GetInstance()
+    Runtime::EventBus::GetInstance()
         .AddGamepadConnectionListener([this](i32 jid, GamepadConnection connection) {
                     if (connection == GamepadConnection::Connected)
                     {
@@ -20,6 +20,13 @@ Manager::Manager()
                         OnGamepadDisconnected(jid);
                     }
                 });
+}
+
+Manager::~Manager()
+{
+    DisableGamepad();
+    DisableKeyboard();
+    DisableMouse();
 }
 
 void Manager::Update(f32 dt)
@@ -54,12 +61,12 @@ void Manager::EnableGamepad(std::unique_ptr<Gamepad> gamepad)
         return;
     m_gamepad = std::move(gamepad);
 
-    Core::EventBus::GetInstance()
+    Runtime::EventBus::GetInstance()
         .AddGamepadButtonListener([this](GamepadButton btn, Action action) {
                     m_gamepad->ButtonListener(btn, action);
                 });
 
-    Core::EventBus::GetInstance()
+    Runtime::EventBus::GetInstance()
         .AddGamepadAxisListener([this](GamepadAxis axis, f32 rawValue) {
                     m_gamepad->AxisListener(axis, rawValue);
                 });
@@ -70,7 +77,7 @@ void Manager::EnableKeyboard(std::unique_ptr<Keyboard> keyboard)
         return;
     m_keyboard = std::move(keyboard);
 
-    Core::EventBus::GetInstance()
+    Runtime::EventBus::GetInstance()
         .AddKeyListener([this](Input::Key key, i32 scancode, Input::Action action, Input::Mod mods) {
                     m_keyboard->OnButtonEvent(key, scancode, action, mods);
                 });
@@ -81,11 +88,11 @@ void Manager::EnableMouse(std::unique_ptr<Mouse> mouse)
         return;
     m_mouse = std::move(mouse);
 
-    Core::EventBus::GetInstance()
+    Runtime::EventBus::GetInstance()
         .AddMouseButtonListener([this](Input::MouseButton btn, Input::Action a, Input::Mod mods) {
                     m_mouse->OnButtonEvent(btn, 0, a, mods);
                 });
-    Core::EventBus::GetInstance()
+    Runtime::EventBus::GetInstance()
         .AddCursorPosListener([this](f64 x, f64 y) {
                     m_mouse->OnMoveEvent(x, y);
                 });

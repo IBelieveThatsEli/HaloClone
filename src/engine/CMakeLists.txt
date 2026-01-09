@@ -12,7 +12,6 @@ target_link_libraries(${PROJECT_NAME}
         Vulkan::Vulkan
         glad
         volk
-        glm
         nlohmann_json::nlohmann_json
 )
 
@@ -22,4 +21,5 @@ target_include_directories(${PROJECT_NAME}
         ${nuklear_SOURCE_DIR}
         ${entt_SOURCE_DIR}/src
         ${tinygltf_SOURCE_DIR}
+        ${glm_SOURCE_DIR}
 )

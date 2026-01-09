@@ -6,5 +6,5 @@
 
 namespace Input
 {
-    class Keyboard : public BaseButton<Key> {};
+    class Keyboard final : public BaseButton<Key> {};
 } // Input

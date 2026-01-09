@@ -1,5 +1,7 @@
 #include "window.hpp"
 
+// #include "eventbridge.hpp"
+
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <volk.h>
@@ -14,6 +16,7 @@ Window::Window(const Properties& properties)
     : BaseWindow(properties) 
 {
    CreateWindow(); 
+//    EventBridge::SetupCallbacks(m_handle);
 }
 
 Window::~Window()
@@ -225,7 +228,7 @@ bool Window::InitGLAD() noexcept
 
 bool Window::CreateVKWindowSurface() noexcept
 {
-
+    return true;
 }
 
 void Window::CenterWindow()

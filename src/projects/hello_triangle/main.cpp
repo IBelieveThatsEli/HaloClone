@@ -7,8 +7,7 @@ int main()
 {
     try 
     {
-        Engine::Application hello_triangle;
-        hello_triangle.LoadScene("src/projects/hello_triangle/scenes/scene.json");
+        Application hello_triangle;
         hello_triangle.Run();
     } 
     catch (std::exception& e) 

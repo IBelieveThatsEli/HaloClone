@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils/types.hpp"
+#include "core/utils/types.hpp"
 
 namespace Scene::Components
 {

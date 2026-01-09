@@ -3,7 +3,7 @@
 #include "input/types/key.hpp"
 #include "input/types/mousebutton.hpp"
 #include "platform/glfw/window.hpp"
-#include "core/events/eventbus.hpp"
+#include "runtime/events/eventbus.hpp"
 #include "platform/glfw/eventbridge.hpp"
 
 
@@ -25,12 +25,12 @@ int main()
             return -1;
         }
 
-        Core::EventBus::GetInstance()
+        Runtime::EventBus::GetInstance()
             .AddFramebufferListener([](i32 w, i32 h) {
                     std::print("{}x{}\n", w, h);
                 });
 
-        Core::BaseWindow::Properties properties{};
+        Platform::BaseWindow::Properties properties{};
 
         SDL3::Window window(properties);
 
@@ -62,12 +62,12 @@ int main()
                         if (toggleMode)
                         {
                             std::print("Toggled Fullscreen borderless\n");
-                            window.SetWindowMode(Core::BaseWindow::Mode::FullscreenBorderless);
+                            window.SetWindowMode(Platform::BaseWindow::Mode::FullscreenBorderless);
                         }
                         else
                         {
                             std::print("Toggled Fullscreen\n");
-                            window.SetWindowMode(Core::BaseWindow::Mode::Fullscreen);
+                            window.SetWindowMode(Platform::BaseWindow::Mode::Fullscreen);
                         }
                     }
                     else
@@ -75,12 +75,12 @@ int main()
                         if (toggleMode)
                         {
                             std::print("Toggled Window Borderless\n");
-                            window.SetWindowMode(Core::BaseWindow::Mode::BorderlessWindow);
+                            window.SetWindowMode(Platform::BaseWindow::Mode::BorderlessWindow);
                         }
                         else
                         {
                             std::print("Toggled Window\n");
-                            window.SetWindowMode(Core::BaseWindow::Mode::Windowed);
+                            window.SetWindowMode(Platform::BaseWindow::Mode::Windowed);
                         }
                     }
                 }
@@ -92,12 +92,12 @@ int main()
                         if (toggleMode)
                         {
                             std::print("Toggled Fullscreen borderless\n");
-                            window.SetWindowMode(Core::BaseWindow::Mode::FullscreenBorderless);
+                            window.SetWindowMode(Platform::BaseWindow::Mode::FullscreenBorderless);
                         }
                         else
                         {
                             std::print("Toggled Fullscreen\n");
-                            window.SetWindowMode(Core::BaseWindow::Mode::Fullscreen);
+                            window.SetWindowMode(Platform::BaseWindow::Mode::Fullscreen);
                         }
                     }
                     else
@@ -105,12 +105,12 @@ int main()
                         if (toggleMode)
                         {
                             std::print("Toggled Window Borderless\n");
-                            window.SetWindowMode(Core::BaseWindow::Mode::BorderlessWindow);
+                            window.SetWindowMode(Platform::BaseWindow::Mode::BorderlessWindow);
                         }
                         else
                         {
                             std::print("Toggled Window\n");
-                            window.SetWindowMode(Core::BaseWindow::Mode::Windowed);
+                            window.SetWindowMode(Platform::BaseWindow::Mode::Windowed);
                         }
                     }
                 }
@@ -142,8 +142,8 @@ int main()
         SDL_Quit();
         // glfwInit();
 
-        // Core::BaseWindow::Properties properties {};
-        // properties.mode = Core::BaseWindow::Mode::Windowed;
+        // Platform::BaseWindow::Properties properties {};
+        // properties.mode = Platform::BaseWindow::Mode::Windowed;
         // GLFW::Window window(properties);
 
         // for (auto& func : window.GetFramebufferCallbacks()) 
@@ -198,12 +198,12 @@ int main()
         //                 if (toggleMode)
         //                 {
         //                     std::print("Toggled Fullscreen borderless\n");
-        //                     window.SetWindowMode(Core::BaseWindow::Mode::FullscreenBorderless);
+        //                     window.SetWindowMode(Platform::BaseWindow::Mode::FullscreenBorderless);
         //                 }
         //                 else
         //                 {
         //                     std::print("Toggled Fullscreen\n");
-        //                     window.SetWindowMode(Core::BaseWindow::Mode::Fullscreen);
+        //                     window.SetWindowMode(Platform::BaseWindow::Mode::Fullscreen);
         //                 }
         //             }
         //             else
@@ -211,12 +211,12 @@ int main()
         //                 if (toggleMode)
         //                 {
         //                     std::print("Toggled Window Borderless\n");
-        //                     window.SetWindowMode(Core::BaseWindow::Mode::BorderlessWindow);
+        //                     window.SetWindowMode(Platform::BaseWindow::Mode::BorderlessWindow);
         //                 }
         //                 else
         //                 {
         //                     std::print("Toggled Window\n");
-        //                     window.SetWindowMode(Core::BaseWindow::Mode::Windowed);
+        //                     window.SetWindowMode(Platform::BaseWindow::Mode::Windowed);
         //                 }
         //             }
         //         }
@@ -228,12 +228,12 @@ int main()
         //                 if (toggleMode)
         //                 {
         //                     std::print("Toggled Fullscreen borderless\n");
-        //                     window.SetWindowMode(Core::BaseWindow::Mode::FullscreenBorderless);
+        //                     window.SetWindowMode(Platform::BaseWindow::Mode::FullscreenBorderless);
         //                 }
         //                 else
         //                 {
         //                     std::print("Toggled Fullscreen\n");
-        //                     window.SetWindowMode(Core::BaseWindow::Mode::Fullscreen);
+        //                     window.SetWindowMode(Platform::BaseWindow::Mode::Fullscreen);
         //                 }
         //             }
         //             else
@@ -241,12 +241,12 @@ int main()
         //                 if (toggleMode)
         //                 {
         //                     std::print("Toggled Window Borderless\n");
-        //                     window.SetWindowMode(Core::BaseWindow::Mode::BorderlessWindow);
+        //                     window.SetWindowMode(Platform::BaseWindow::Mode::BorderlessWindow);
         //                 }
         //                 else
         //                 {
         //                     std::print("Toggled Window\n");
-        //                     window.SetWindowMode(Core::BaseWindow::Mode::Windowed);
+        //                     window.SetWindowMode(Platform::BaseWindow::Mode::Windowed);
         //                 }
         //             }
         //         }

@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils/types.hpp"
+#include "core/utils/types.hpp"
 
 #define GLM_ENABLE_EXPERIMENTAL 1
 

@@ -2,18 +2,18 @@
 
 #include <memory>
 
-
 #include "keyboard.hpp"
 #include "mouse.hpp"
 #include "gamepad.hpp"
-#include "utils/types.hpp"
+#include "core/utils/types.hpp"
 
 namespace Input
 {
-    class Manager
+    class Manager final
     {
         public:
             Manager();
+            ~Manager();
 
             void Update(f32 dt);
             

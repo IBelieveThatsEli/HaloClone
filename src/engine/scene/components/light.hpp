@@ -3,7 +3,7 @@
 #include <glm/ext/vector_float3.hpp>
 #include <glm/trigonometric.hpp>
 
-#include "utils/types.hpp"
+#include "core/utils/types.hpp"
 
 namespace Scene::Components
 {

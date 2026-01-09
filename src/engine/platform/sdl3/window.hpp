@@ -1,16 +1,15 @@
 #pragma once
 
 #include "platform/basewindow/basewindow.hpp"
-#include "utils/types.hpp"
+#include "core/utils/types.hpp"
 
 #include <string_view>
 
 struct SDL_Window;
-struct SDL_GLContext;
 
 namespace SDL3
 {
-    class Window : public Core::BaseWindow
+    class Window final : public Platform::BaseWindow
     {
         public:
             Window(const Properties& properties);
@@ -28,7 +27,7 @@ namespace SDL3
 
             void ChangeGraphicsAPI(const Core::GraphicsAPI& api) override;
 
-            [[nodiscard]] SDL_Window* GetHandle() noexcept { return m_handle; }
+            [[nodiscard]] void* GetHandle() noexcept override { return m_handle; }
 
             void SetResizable     (bool flag) override;
             void SetVisible       (bool flag) override;

@@ -1,9 +1,11 @@
 #include "window.hpp"
+
 #include "core/api/api.hpp"
-#include "platform/sdl3/eventbridge.hpp"
+// #include "platform/sdl3/eventbridge.hpp"
 
 #include <SDL3/SDL.h>
-#include <SDL3/SDL_video.h>
+//#include <SDL3/SDL_video.h>
+
 #include <glad/glad.h>
 #include <volk.h>
 #include <format>
@@ -63,17 +65,17 @@ void Window::CreateWindow()
 
     SetVSync(m_properties.vsync);
 
-    if (m_properties.graphicsAPI == Core::GraphicsAPI::OpenGL)
-    {
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, m_properties.glMajorVersion);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, m_properties.glMinorVersion);
-        SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
+    // if (m_properties.graphicsAPI == Core::GraphicsAPI::OpenGL)
+    // {
+    //     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MAJOR_VERSION, m_properties.glMajorVersion);
+    //     SDL_GL_SetAttribute(SDL_GL_CONTEXT_MINOR_VERSION, m_properties.glMinorVersion);
+    //     SDL_GL_SetAttribute(SDL_GL_CONTEXT_PROFILE_MASK, SDL_GL_CONTEXT_PROFILE_CORE);
 
-        SDL_GLContext glContext = SDL_GL_CreateContext(m_handle);
-        if (!glContext)
-            throw std::runtime_error(std::format("SDL_GL_CreateContext failed: {}\n", SDL_GetError()));
-        SDL_GL_MakeCurrent(m_handle, glContext);
-    }
+    //     SDL_GLContext glContext = SDL_GL_CreateContext(m_handle);
+    //     if (!glContext)
+    //         throw std::runtime_error(std::format("SDL_GL_CreateContext failed: {}\n", SDL_GetError()));
+    //     SDL_GL_MakeCurrent(m_handle, glContext);
+    // }
 }
 
 void Window::DestroyWindow()
@@ -86,10 +88,10 @@ void Window::DestroyWindow()
 }
 void Window::PollEvents()
 {
-    SDL_Event event;
-    while (SDL_PollEvent(&event)) {
-        EventBridge::ProcessEvent(event);
-    }
+    // SDL_Event event;
+    // while (SDL_PollEvent(&event)) {
+    //     EventBridge::ProcessEvent(event);
+    // }
 }
 
 void Window::SwapBuffers()
@@ -217,12 +219,13 @@ void Window::SetWindowMode(Mode mode)
 
 bool Window::InitGLAD() noexcept
 {
-    return gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
+    //return gladLoadGLLoader((GLADloadproc)SDL_GL_GetProcAddress);
+    return true;
 }
 
 bool Window::CreateVKWindowSurface() noexcept
 {
-
+    return true;
 }
 
 

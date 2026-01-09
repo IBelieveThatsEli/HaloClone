@@ -4,7 +4,7 @@
 #include <nlohmann/json.hpp>
 #include <print>
 
-#include "assets/meshlibrary.hpp"
+#include "assets/storage/meshlibrary.hpp"
 #include "scene/scene.hpp"
 #include "scene/components/transform.hpp"
 #include "scene/components/camera.hpp"

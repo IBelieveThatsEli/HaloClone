@@ -1,21 +1,21 @@
 #include "basewindow.hpp"
 
-#include "core/events/eventbus.hpp"
+#include "runtime/events/eventbus.hpp"
 
-using namespace Core;
+using namespace Platform;
 
 BaseWindow::BaseWindow(const Properties& properties) 
     : m_properties(properties)
 {
     for (auto& func : m_framebufferCallbacks)
-        EventBus::GetInstance()
+        Runtime::EventBus::GetInstance()
             .AddFramebufferListener([&](i32 w, i32 y) { func(w, y); });
 
     for (auto& func : m_closeCallbacks)
-        EventBus::GetInstance()
+        Runtime::EventBus::GetInstance()
             .AddWindowCloseListener([&]() { func(); });
 
     for (auto& func : m_focusCallbacks)
-        EventBus::GetInstance()
+        Runtime::EventBus::GetInstance()
             .AddWindowFocusListener([&](bool focused) { func(focused); });
 }

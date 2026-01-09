@@ -1,6 +1,6 @@
 #pragma once
 
-#include "utils/types.hpp"
+#include "core/utils/types.hpp"
 
 namespace Assets
 {
@@ -26,6 +26,7 @@ namespace Assets
 } // Assets
 
 #include <functional>
+
 namespace std 
 {
     template<typename T>

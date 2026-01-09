@@ -2,7 +2,6 @@
 
 #include <GLFW/glfw3.h>
 
-#include "core/events/eventbus.hpp"
 #include "input/types/action.hpp"
 #include "input/types/gamepadbutton.hpp"
 #include "input/types/gamepadconnection.hpp"
@@ -10,8 +9,10 @@
 #include "input/types/key.hpp"
 #include "input/types/mod.hpp"
 
+#include "runtime/events/eventbus.hpp"
+
 using namespace GLFW;
-using namespace Core;
+using namespace Runtime;
 using namespace Input;
 
 static Key ConvertGLFWKey(i32 glfwKey)
@@ -120,18 +121,54 @@ static GamepadAxis ConvertGLFWGamepadAxis(i32 axis)
     }
 }
 
-void EventBridge::SetupCallbacks(GLFWwindow* window)
+EventBridge::EventBridge(GLFWwindow* window)
 {
-    glfwSetFramebufferSizeCallback  (window, FramebufferSizeCallback  );
-    glfwSetKeyCallback              (window, KeyCallback              );
-    glfwSetCursorPosCallback        (window, CursorPosCallback        );
-    glfwSetCursorEnterCallback      (window, CursorEnterCallback      );
-    glfwSetMouseButtonCallback      (window, MouseButtonCallback      );
-    glfwSetScrollCallback           (window, ScrollCallback           );
-    glfwSetWindowCloseCallback      (window, WindowCloseCallback      );
-    glfwSetWindowFocusCallback      (window, WindowFocusCallback      );
-    glfwSetJoystickCallback         (GamepadCallback);
+    glfwSetWindowUserPointer(window, this);
 
+    glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, i32 width, i32 height) {
+        GLFW::EventBridge* bridge = static_cast<GLFW::EventBridge*>(glfwGetWindowUserPointer(window));
+        bridge->FramebufferSizeCallback(window, width, height);
+    });
+
+    glfwSetKeyCallback(window, [](GLFWwindow* window, i32 key, i32 scancode, i32 action, i32 mods) {
+        GLFW::EventBridge* bridge = static_cast<GLFW::EventBridge*>(glfwGetWindowUserPointer(window));
+        bridge->KeyCallback(window, key, scancode, action, mods);
+    });
+
+    glfwSetCursorPosCallback(window, [](GLFWwindow* window, f64 x, f64 y) {
+        GLFW::EventBridge* bridge = static_cast<GLFW::EventBridge*>(glfwGetWindowUserPointer(window));
+        bridge->CursorPosCallback(window, x, y);
+    });
+
+    glfwSetCursorEnterCallback(window, [](GLFWwindow* window, i32 entered) {
+        GLFW::EventBridge* bridge = static_cast<GLFW::EventBridge*>(glfwGetWindowUserPointer(window));
+        bridge->CursorEnterCallback(window, entered);
+    });
+
+    glfwSetMouseButtonCallback(window, [](GLFWwindow* window, i32 mousebutton, i32 action, i32 mods) {
+        GLFW::EventBridge* bridge = static_cast<GLFW::EventBridge*>(glfwGetWindowUserPointer(window));
+        bridge->MouseButtonCallback(window, mousebutton, action, mods);
+    });
+
+    glfwSetScrollCallback(window, [](GLFWwindow* window, f64 x, f64 y) {
+        GLFW::EventBridge* bridge = static_cast<GLFW::EventBridge*>(glfwGetWindowUserPointer(window));
+        bridge->ScrollCallback(window, x, y);
+    });
+
+    glfwSetWindowCloseCallback(window, [](GLFWwindow* window) {
+        GLFW::EventBridge* bridge = static_cast<GLFW::EventBridge*>(glfwGetWindowUserPointer(window));
+        bridge->WindowCloseCallback(window);
+    });
+
+    glfwSetWindowFocusCallback(window, [](GLFWwindow* window, i32 focused) {
+        GLFW::EventBridge* bridge = static_cast<GLFW::EventBridge*>(glfwGetWindowUserPointer(window));
+        bridge->WindowFocusCallback(window, focused);
+    });
+
+    glfwSetJoystickCallback([](i32 jid, i32 event) {
+        EventBus::GetInstance()
+            .DispatchGamepadConnectionListener(jid, event == GLFW_CONNECTED ? GamepadConnection::Connected : GamepadConnection::Disconnected);
+    });
 
     for(i32 jid = 0; jid <= GLFW_JOYSTICK_LAST; ++jid)
     {
@@ -141,8 +178,36 @@ void EventBridge::SetupCallbacks(GLFWwindow* window)
                 .DispatchGamepadConnectionListener(jid, GamepadConnection::Connected);
         }
     }
-
 }
+
+void EventBridge::PollEvents()
+{
+    
+}
+
+// void EventBridge::SetupCallbacks(GLFWwindow* window)
+// {
+//     glfwSetFramebufferSizeCallback  (window, FramebufferSizeCallback  );
+//     glfwSetKeyCallback              (window, KeyCallback              );
+//     glfwSetCursorPosCallback        (window, CursorPosCallback        );
+//     glfwSetCursorEnterCallback      (window, CursorEnterCallback      );
+//     glfwSetMouseButtonCallback      (window, MouseButtonCallback      );
+//     glfwSetScrollCallback           (window, ScrollCallback           );
+//     glfwSetWindowCloseCallback      (window, WindowCloseCallback      );
+//     glfwSetWindowFocusCallback      (window, WindowFocusCallback      );
+//     glfwSetJoystickCallback         (GamepadCallback);
+
+
+//     for(i32 jid = 0; jid <= GLFW_JOYSTICK_LAST; ++jid)
+//     {
+//         if(glfwJoystickPresent(jid))
+//         {
+//             EventBus::GetInstance()
+//                 .DispatchGamepadConnectionListener(jid, GamepadConnection::Connected);
+//         }
+//     }
+
+// }
 
 void EventBridge::FramebufferSizeCallback(GLFWwindow* window, i32 width, i32 height)
 {
@@ -168,11 +233,7 @@ void EventBridge::CursorEnterCallback(GLFWwindow* window, i32 entered)
     EventBus::GetInstance()
         .DispatchCursorEnterListener(entered == GLFW_TRUE);
 }
-void EventBridge::MouseButtonCallback(
-        GLFWwindow* window, 
-        i32         mousebutton, 
-        i32         action, 
-        i32         mods)
+void EventBridge::MouseButtonCallback(GLFWwindow* window, i32 mousebutton, i32 action, i32 mods)
 {
     EventBus::GetInstance()
         .DispatchMouseButtonListener(
@@ -196,46 +257,46 @@ void EventBridge::WindowFocusCallback(GLFWwindow* window, i32 focused)
     EventBus::GetInstance()
         .DispatchWindowFocusListener(focused == GLFW_TRUE);
 }
-void EventBridge::GamepadCallback(i32 jid, i32 event)
-{
-    EventBus::GetInstance()
-        .DispatchGamepadConnectionListener(jid, event == GLFW_CONNECTED ? GamepadConnection::Connected : GamepadConnection::Disconnected);
-}
+// void EventBridge::GamepadCallback(i32 jid, i32 event)
+// {
+//     EventBus::GetInstance()
+//         .DispatchGamepadConnectionListener(jid, event == GLFW_CONNECTED ? GamepadConnection::Connected : GamepadConnection::Disconnected);
+// }
 
-void EventBridge::UpdateGamepads()
-{
-    for(i32 jid = GLFW_JOYSTICK_1; jid <= GLFW_JOYSTICK_LAST; ++jid)
-    {
-        if(!glfwJoystickIsGamepad(jid))
-            continue;
+// void EventBridge::UpdateGamepads()
+// {
+//     for(i32 jid = GLFW_JOYSTICK_1; jid <= GLFW_JOYSTICK_LAST; ++jid)
+//     {
+//         if(!glfwJoystickIsGamepad(jid))
+//             continue;
 
-        GLFWgamepadstate state;
-        if(!glfwGetGamepadState(jid, &state))
-            continue;
+//         GLFWgamepadstate state;
+//         if(!glfwGetGamepadState(jid, &state))
+//             continue;
 
-        static GLFWgamepadstate prev[16] = {};
+//         static GLFWgamepadstate prev[16] = {};
 
-        for(i32 i = 0; i < GLFW_GAMEPAD_BUTTON_LAST + 1; ++i)
-        {
-            if(state.buttons[i] == prev[jid].buttons[i])
-                continue;
+//         for(i32 i = 0; i < GLFW_GAMEPAD_BUTTON_LAST + 1; ++i)
+//         {
+//             if(state.buttons[i] == prev[jid].buttons[i])
+//                 continue;
 
-            GamepadButton button = ConvertGLFWGamepadButton(i);
-            Action action = ConvertGLFWAction(state.buttons[i]);
+//             GamepadButton button = ConvertGLFWGamepadButton(i);
+//             Action action = ConvertGLFWAction(state.buttons[i]);
 
-            EventBus::GetInstance()
-                .DispatchGamepadButtonListener(button, action);
-        }
+//             EventBus::GetInstance()
+//                 .DispatchGamepadButtonListener(button, action);
+//         }
 
-        for (int i = 0; i < GLFW_GAMEPAD_AXIS_LAST + 1; ++i)
-        {
-            f32 value = state.axes[i];
+//         for (int i = 0; i < GLFW_GAMEPAD_AXIS_LAST + 1; ++i)
+//         {
+//             f32 value = state.axes[i];
 
-            GamepadAxis axis = ConvertGLFWGamepadAxis(i);
-            EventBus::GetInstance()
-                .DispatchGamepadAxisListener(axis, value); 
-        }
+//             GamepadAxis axis = ConvertGLFWGamepadAxis(i);
+//             EventBus::GetInstance()
+//                 .DispatchGamepadAxisListener(axis, value); 
+//         }
 
-        prev[jid] = state;
-    }
-}
+//         prev[jid] = state;
+//     }
+// }

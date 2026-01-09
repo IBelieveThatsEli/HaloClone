@@ -1,35 +1,43 @@
+/**
+ * @file    application.hpp
+ * @author  EMP "Ekam"
+ * @brief   Declares the Application object for the Application subsystem.
+ * 
+ * The Application object acts as the top-level coordinator of the runtime.
+ * It is responsible for constructing and configuring high-level runtime objects,
+ * initiating the main execution loop, and managing application lifetime and shutdown.
+ *
+ * The Application subsystem does not implement domain-specific engine logic.
+ * Instead, it delegates responsibilities to dedicated engine subsystems such as
+ * the Engine runtime, Platform manager, and supporting Core utilities.
+ * 
+ * @date    2026
+ */
+
 #pragma once
 
-#include <memory>
+/**
+ * @class Application
+ * @brief High-level engine orchestrator and execution entry point.
+ * 
+ * Acts as the top-level runtime coordinator of the engine.
+ *
+ * The Application is responsible for:
+ * - Constructing and wiring runtime objects (Engine, Platform, etc.)
+ * - Driving the main loop
+ * - Managing application startup and shutdown
+ *
+ * The Application does not own or implement rendering, input, or platform logic.
+ * It coordinates subsystem interaction and enforces high-level execution flow.
+ * 
+ */
 
-#include "platform/manager/manager.hpp"
-
-namespace Core 
+class Application final
 {
-    class Engine;
-}
+    public:
+        Application () = default;
+        ~Application() = default;
 
-namespace Engine
-{
-    class Application
-    {
-        public:
-            Application(
-                    const Core::GraphicsAPI&& = Core::GraphicsAPI::OpenGL, 
-                    const Core::WindowAPI&&   = Core::WindowAPI::GLFW
-            );
-            ~Application();
+        void Run    ();
+};
 
-            void ChangeWindowAPI(const Core::WindowAPI&& api);
-            void ChangeGraphicsAPI(const Core::GraphicsAPI&& api);
-
-            void LoadScene(std::string_view path);
-
-            void Run();
-
-        private:
-            Platform::Manager m_platformManager;
-
-            std::unique_ptr<Core::Engine> m_engine;
-    };
-} // Engine

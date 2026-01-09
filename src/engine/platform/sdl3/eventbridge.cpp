@@ -1,13 +1,14 @@
 #include "eventbridge.hpp"
 
-#include "core/events/eventbus.hpp"
+#include "runtime/events/eventbus.hpp"
+#include "core/utils/types.hpp"
+
 #include "input/types/action.hpp"
 #include "input/types/gamepadbutton.hpp"
 #include "input/types/gamepadconnection.hpp"
 #include "input/types/mousebutton.hpp"
 #include "input/types/key.hpp"
 #include "input/types/mod.hpp"
-#include "utils/types.hpp"
 
 static Input::Key ConvertSDLKey(SDL_Keycode key)
 {
@@ -138,9 +139,18 @@ static Input::GamepadAxis ConvertSDLGamepadAxis(u8 a)
 
 using namespace SDL3;
 
+void EventBridge::PollEvents()
+{
+    SDL_Event event;
+    while (SDL_PollEvent(&event)) 
+    {
+        EventBridge::ProcessEvent(event);
+    }
+}
+
 void EventBridge::ProcessEvent(const SDL_Event &e)
 {
-    auto& bus = Core::EventBus::GetInstance();
+    auto& bus = Runtime::EventBus::GetInstance();
 
     switch (e.type)
     {
@@ -244,7 +254,7 @@ void EventBridge::ProcessEvent(const SDL_Event &e)
     } 
 }
 
-void EventBridge::UpdateGamepads()
-{
+// void EventBridge::UpdateGamepads()
+// {
 
-}
+// }

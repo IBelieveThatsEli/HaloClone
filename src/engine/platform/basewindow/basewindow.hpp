@@ -1,13 +1,13 @@
 #pragma once
 
-#include "utils/types.hpp"
+#include "core/utils/types.hpp"
 #include "core/api/api.hpp"
 
 #include <string_view>
 #include <vector>
 #include <functional>
 
-namespace Core 
+namespace Platform 
 {
     class BaseWindow
     {
@@ -40,7 +40,7 @@ namespace Core
                 bool scaleToMonitor  { false };
                 bool transparent     { false };
 
-                GraphicsAPI graphicsAPI { GraphicsAPI::OpenGL };
+                Core::GraphicsAPI graphicsAPI { Core::GraphicsAPI::OpenGL };
 
                 i32 glMajorVersion  { 4 };
                 i32 glMinorVersion  { 0 };
@@ -99,6 +99,8 @@ namespace Core
             [[nodiscard]] virtual bool InitGLAD() noexcept = 0;
             [[nodiscard]] virtual bool CreateVKWindowSurface() noexcept = 0;
 
+            [[nodiscard]] virtual void* GetHandle() noexcept = 0;
+
         protected:
             virtual void CreateWindow() = 0;
             virtual void DestroyWindow() = 0;
@@ -116,4 +118,4 @@ namespace Core
                 {[&](bool focused) { m_properties.focused = focused; }}
             };
     };
-} // Core 
+} // Platform 

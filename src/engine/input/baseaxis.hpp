@@ -4,7 +4,7 @@
 #include <unordered_map>
 #include <cmath>
 
-#include "utils/types.hpp"
+#include "core/utils/types.hpp"
 
 namespace Input
 {

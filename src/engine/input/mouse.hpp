@@ -5,7 +5,7 @@
 
 namespace Input
 {
-    class Mouse : public BaseButton<MouseButton>
+    class Mouse final : public BaseButton<MouseButton>
     {
     public:
         Mouse(std::initializer_list<MouseButton> buttons)

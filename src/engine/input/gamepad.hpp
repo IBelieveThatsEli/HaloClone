@@ -8,7 +8,7 @@
 
 namespace Input
 {
-    class Gamepad
+    class Gamepad final
     {
         public:
             BaseButton<GamepadButton> buttons;

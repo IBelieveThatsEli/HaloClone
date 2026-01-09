@@ -2,14 +2,14 @@
 
 #include <string_view>
 
-#include "utils/types.hpp"
+#include "core/utils/types.hpp"
 #include "platform/basewindow/basewindow.hpp"
 
 struct GLFWwindow;
 
 namespace GLFW
 {
-    class Window : public Core::BaseWindow
+    class Window final : public Platform::BaseWindow
     {
         public:
             Window(const Properties& propeties);
@@ -27,7 +27,7 @@ namespace GLFW
 
             void ChangeGraphicsAPI(const Core::GraphicsAPI& api) override;
 
-            [[nodiscard]] GLFWwindow* GetHandle() noexcept { return m_handle; }
+            void* GetHandle() noexcept override { return m_handle; }
 
             void SetResizable     (bool flag) override;
             void SetVisible       (bool flag) override;
