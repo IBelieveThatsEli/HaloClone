@@ -11,10 +11,6 @@ BaseWindow::BaseWindow(const Properties& properties)
         Runtime::EventBus::GetInstance()
             .AddFramebufferListener([&](i32 w, i32 y) { func(w, y); });
 
-    for (auto& func : m_closeCallbacks)
-        Runtime::EventBus::GetInstance()
-            .AddWindowCloseListener([&]() { func(); });
-
     for (auto& func : m_focusCallbacks)
         Runtime::EventBus::GetInstance()
             .AddWindowFocusListener([&](bool focused) { func(focused); });

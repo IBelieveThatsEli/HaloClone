@@ -18,13 +18,13 @@ void Manager::Create(
     switch (m_api)
     {
         case Core::WindowAPI::SDL3:
-            m_window = std::make_unique<SDL3::Window>(props);
-            m_eventBridge = std::make_unique<SDL3::EventBridge>();
+            m_window        = std::make_unique<SDL3::Window>(props);
+            m_eventBridge   = std::make_unique<SDL3::EventBridge>();
             break;
 
         case Core::WindowAPI::GLFW:
-            m_window = std::make_unique<GLFW::Window>(props);
-            m_eventBridge = std::make_unique<GLFW::EventBridge>(static_cast<GLFWwindow*>(m_window->GetHandle()));
+            m_window        = std::make_unique<GLFW::Window>(props);
+            m_eventBridge   = std::make_unique<GLFW::EventBridge>(static_cast<GLFWwindow*>(m_window->GetHandle()));
             break;
     }
     }

@@ -27,7 +27,7 @@ namespace Platform
 
         private:
             Core::WindowAPI m_api;
-            std::unique_ptr<BaseWindow> m_window;
-            std::unique_ptr<IEventBridge> m_eventBridge;
+            std::unique_ptr<BaseWindow> m_window = nullptr;
+            std::unique_ptr<IEventBridge> m_eventBridge = nullptr;
     };
 } // Platform

@@ -93,7 +93,6 @@ namespace Platform
             void AddFocusCallback      (std::function<void(bool    )>&& func);
 
             [[nodiscard]] std::vector<std::function<void(i32, i32)>>& GetFramebufferCallbacks() noexcept { return m_framebufferCallbacks; }
-            [[nodiscard]] std::vector<std::function<void(        )>>& GetCloseCallbacks      () noexcept { return m_closeCallbacks;       }
             [[nodiscard]] std::vector<std::function<void(bool    )>>& GetFocusCallbacks      () noexcept { return m_focusCallbacks;       }
 
             [[nodiscard]] virtual bool InitGLAD() noexcept = 0;
@@ -106,13 +105,9 @@ namespace Platform
             virtual void DestroyWindow() = 0;
 
             Properties m_properties {};
-            bool m_isOpen { true };
 
             std::vector<std::function<void(i32, i32)>> m_framebufferCallbacks {
                 {[&](i32 w, i32 h) { m_properties.width = w; m_properties.height = h; }}
-            };
-            std::vector<std::function<void()>>         m_closeCallbacks       {
-                [&]() { m_isOpen = false; }
             };
             std::vector<std::function<void(bool)>>     m_focusCallbacks       {
                 {[&](bool focused) { m_properties.focused = focused; }}

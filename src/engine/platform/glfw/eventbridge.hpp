@@ -42,5 +42,6 @@ namespace GLFW
             void WindowCloseCallback(GLFWwindow*);
             void WindowFocusCallback(GLFWwindow*, i32);
             // void GamepadCallback(i32, i32);
+            void UpdateGamepads();
     };
 } // GLFW

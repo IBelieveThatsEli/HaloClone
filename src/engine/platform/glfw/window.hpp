@@ -27,7 +27,7 @@ namespace GLFW
 
             void ChangeGraphicsAPI(const Core::GraphicsAPI& api) override;
 
-            void* GetHandle() noexcept override { return m_handle; }
+            [[nodiscard]] void* GetHandle() noexcept override { return m_handle; }
 
             void SetResizable     (bool flag) override;
             void SetVisible       (bool flag) override;

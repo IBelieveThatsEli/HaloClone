@@ -1,5 +1,6 @@
 #include "eventbridge.hpp"
 
+#include <print>
 #include <GLFW/glfw3.h>
 
 #include "input/types/action.hpp"
@@ -124,6 +125,15 @@ static GamepadAxis ConvertGLFWGamepadAxis(i32 axis)
 EventBridge::EventBridge(GLFWwindow* window)
 {
     glfwSetWindowUserPointer(window, this);
+    
+    for(i32 jid = 0; jid <= GLFW_JOYSTICK_LAST; ++jid)
+    {
+        if(glfwJoystickPresent(jid))
+        {
+            EventBus::GetInstance()
+                .DispatchGamepadConnectionListener(jid, GamepadConnection::Connected);
+        }
+    }
 
     glfwSetFramebufferSizeCallback(window, [](GLFWwindow* window, i32 width, i32 height) {
         GLFW::EventBridge* bridge = static_cast<GLFW::EventBridge*>(glfwGetWindowUserPointer(window));
@@ -169,20 +179,12 @@ EventBridge::EventBridge(GLFWwindow* window)
         EventBus::GetInstance()
             .DispatchGamepadConnectionListener(jid, event == GLFW_CONNECTED ? GamepadConnection::Connected : GamepadConnection::Disconnected);
     });
-
-    for(i32 jid = 0; jid <= GLFW_JOYSTICK_LAST; ++jid)
-    {
-        if(glfwJoystickPresent(jid))
-        {
-            EventBus::GetInstance()
-                .DispatchGamepadConnectionListener(jid, GamepadConnection::Connected);
-        }
-    }
 }
 
 void EventBridge::PollEvents()
 {
-    
+    glfwPollEvents();
+    UpdateGamepads();
 }
 
 // void EventBridge::SetupCallbacks(GLFWwindow* window)
@@ -263,40 +265,40 @@ void EventBridge::WindowFocusCallback(GLFWwindow* window, i32 focused)
 //         .DispatchGamepadConnectionListener(jid, event == GLFW_CONNECTED ? GamepadConnection::Connected : GamepadConnection::Disconnected);
 // }
 
-// void EventBridge::UpdateGamepads()
-// {
-//     for(i32 jid = GLFW_JOYSTICK_1; jid <= GLFW_JOYSTICK_LAST; ++jid)
-//     {
-//         if(!glfwJoystickIsGamepad(jid))
-//             continue;
+void EventBridge::UpdateGamepads()
+{
+    for(i32 jid = GLFW_JOYSTICK_1; jid <= GLFW_JOYSTICK_LAST; ++jid)
+    {
+        if(!glfwJoystickIsGamepad(jid))
+            continue;
 
-//         GLFWgamepadstate state;
-//         if(!glfwGetGamepadState(jid, &state))
-//             continue;
+        GLFWgamepadstate state;
+        if(!glfwGetGamepadState(jid, &state))
+            continue;
 
-//         static GLFWgamepadstate prev[16] = {};
+        static GLFWgamepadstate prev[16] = {};
 
-//         for(i32 i = 0; i < GLFW_GAMEPAD_BUTTON_LAST + 1; ++i)
-//         {
-//             if(state.buttons[i] == prev[jid].buttons[i])
-//                 continue;
+        for(i32 i = 0; i < GLFW_GAMEPAD_BUTTON_LAST + 1; ++i)
+        {
+            if(state.buttons[i] == prev[jid].buttons[i])
+                continue;
 
-//             GamepadButton button = ConvertGLFWGamepadButton(i);
-//             Action action = ConvertGLFWAction(state.buttons[i]);
+            GamepadButton button = ConvertGLFWGamepadButton(i);
+            Action action = ConvertGLFWAction(state.buttons[i]);
 
-//             EventBus::GetInstance()
-//                 .DispatchGamepadButtonListener(button, action);
-//         }
+            EventBus::GetInstance()
+                .DispatchGamepadButtonListener(button, action);
+        }
 
-//         for (int i = 0; i < GLFW_GAMEPAD_AXIS_LAST + 1; ++i)
-//         {
-//             f32 value = state.axes[i];
+        for (int i = 0; i < GLFW_GAMEPAD_AXIS_LAST + 1; ++i)
+        {
+            f32 value = state.axes[i];
 
-//             GamepadAxis axis = ConvertGLFWGamepadAxis(i);
-//             EventBus::GetInstance()
-//                 .DispatchGamepadAxisListener(axis, value); 
-//         }
+            GamepadAxis axis = ConvertGLFWGamepadAxis(i);
+            EventBus::GetInstance()
+                .DispatchGamepadAxisListener(axis, value); 
+        }
 
-//         prev[jid] = state;
-//     }
-// }
+        prev[jid] = state;
+    }
+}

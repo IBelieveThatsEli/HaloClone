@@ -1,7 +1,5 @@
 #include "window.hpp"
 
-// #include "eventbridge.hpp"
-
 #include <glad/glad.h>
 #include <GLFW/glfw3.h>
 #include <volk.h>
