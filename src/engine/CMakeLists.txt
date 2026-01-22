@@ -4,10 +4,17 @@ file(GLOB_RECURSE SOURCES "${CMAKE_CURRENT_SOURCE_DIR}/*.cpp")
 
 add_library(${PROJECT_NAME} STATIC ${SOURCES})
 
+# link a single windowing api at a time.
+
+if (ENGINE_USE_GLFW)
+    target_link_libraries(${PROJECT_NAME} PUBLIC glfw)
+endif()
+if (ENGINE_USE_SDL)
+    target_link_libraries(${PROJECT_NAME} PUBLIC SDL3::SDL3)
+endif()
+
 target_link_libraries(${PROJECT_NAME}
     PUBLIC
-        glfw
-        SDL3::SDL3
         OpenGL::GL
         Vulkan::Vulkan
         glad

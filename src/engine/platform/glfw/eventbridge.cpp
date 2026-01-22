@@ -122,8 +122,10 @@ static GamepadAxis ConvertGLFWGamepadAxis(i32 axis)
     }
 }
 
-EventBridge::EventBridge(GLFWwindow* window)
+void EventBridge::Init(void* windowHandle)
 {
+    GLFWwindow* window = static_cast<GLFWwindow*>(windowHandle);
+
     glfwSetWindowUserPointer(window, this);
     
     for(i32 jid = 0; jid <= GLFW_JOYSTICK_LAST; ++jid)

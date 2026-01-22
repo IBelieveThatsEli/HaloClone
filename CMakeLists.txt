@@ -9,32 +9,69 @@ set(BUILD_SHARED_LIBS ON)
 find_package(OpenGL REQUIRED)
 find_package(Vulkan REQUIRED)
 
+# -------------------------------------------------------------------
+# Window Backend Selection
+
+# The engine supports multiple window backends (GLFW, SDL3), but only one
+# may be enabled per build.
+
+# Backend selection is done at compile time via CMake options:
+
+#     -DENGINE_USE_GLFW=ON
+#     -DENGINE_USE_SDL=ON
+
+# Exactly one backend must be enabled.
+# If multiple backends are selected, configuration will fail.
+
+# Unused backends are not fetched, built, or linked.
+# -------------------------------------------------------------------
+
+option(ENGINE_USE_GLFW "Use GLFW backend" ON)
+option(ENGINE_USE_SDL "Use SDL backend" OFF)
+
+if (ENGINE_USE_GLFW AND ENGINE_USE_SDL)
+    message(FATAL_ERROR "Choose only one window backend")
+endif()
+
+
+if (NOT ENGINE_USE_GLFW AND NOT ENGINE_USE_SDL)
+    message(FATAL_ERROR "You must pick a window backend")
+endif()
+
 include(FetchContent)
 
-set(GLFW_BUILD_DOCS     OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
-set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
-set(GLFW_INSTALL        OFF CACHE BOOL "" FORCE)
+if (ENGINE_USE_GLFW)
+    set(GLFW_BUILD_DOCS     OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_TESTS    OFF CACHE BOOL "" FORCE)
+    set(GLFW_BUILD_EXAMPLES OFF CACHE BOOL "" FORCE)
+    set(GLFW_INSTALL        OFF CACHE BOOL "" FORCE)
 
-FetchContent_Declare(
-  glfw
-  GIT_REPOSITORY    https://github.com/glfw/glfw.git
-  GIT_TAG           3.4 
-)
+    FetchContent_Declare(
+    glfw
+    GIT_REPOSITORY    https://github.com/glfw/glfw.git
+    GIT_TAG           3.4 
+    )
 
-FetchContent_MakeAvailable(glfw)
+    FetchContent_MakeAvailable(glfw)
+endif()
 
-set(SDL_TEST            OFF CACHE BOOL "" FORCE)
-set(SDL_EXAMPLES        OFF CACHE BOOL "" FORCE)
-set(SDL_INSTALL         OFF CACHE BOOL "" FORCE)
+if (ENGINE_USE_SDL)
+    set(SDL_TEST            OFF CACHE BOOL "" FORCE)
+    set(SDL_EXAMPLES        OFF CACHE BOOL "" FORCE)
+    set(SDL_INSTALL         OFF CACHE BOOL "" FORCE)
 
-FetchContent_Declare(
-    SDL3
-    GIT_REPOSITORY  https://github.com/libsdl-org/SDL.git
-    GIT_TAG         release-3.2.26
-)
+    FetchContent_Declare(
+        SDL3
+        GIT_REPOSITORY  https://github.com/libsdl-org/SDL.git
+        GIT_TAG         release-3.2.26
+    )
 
-FetchContent_MakeAvailable(SDL3)
+    FetchContent_MakeAvailable(SDL3)
+endif()
+
+# -------------------------------------------------------------------
+# End Of Window Backend Selection
+# -------------------------------------------------------------------
 
 FetchContent_Declare(
     nuklear
@@ -119,5 +156,4 @@ add_library(glad STATIC "${CMAKE_CURRENT_SOURCE_DIR}/libs/glad/src/glad.c")
 target_include_directories(glad PUBLIC ${CMAKE_CURRENT_SOURCE_DIR}/libs/glad/include)
 
 add_subdirectory(src/engine)
-add_subdirectory(src/projects/test_project)
 add_subdirectory(src/projects/hello_triangle)

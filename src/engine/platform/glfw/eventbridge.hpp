@@ -28,7 +28,9 @@ namespace GLFW
     class EventBridge final : public Platform::IEventBridge
     {
         public:
-            EventBridge(GLFWwindow* window);
+            EventBridge() = default;
+
+            void Init(void* windowHandle) override;
 
             void PollEvents() override;
         

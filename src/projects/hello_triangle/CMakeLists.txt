@@ -8,15 +8,19 @@ target_link_libraries(${PROJECT_NAME}
 )
 
 if(WIN32)
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:SDL3::SDL3>
-            $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
+    if (ENGINE_USE_SDL)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                $<TARGET_FILE:SDL3::SDL3>
+                $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        )
+    endif()
 
-    add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            $<TARGET_FILE:glfw>
-            $<TARGET_FILE_DIR:${PROJECT_NAME}>
-    )
+    if (ENGINE_USE_GLFW)
+        add_custom_command(TARGET ${PROJECT_NAME} POST_BUILD
+            COMMAND ${CMAKE_COMMAND} -E copy_if_different
+                $<TARGET_FILE:glfw>
+                $<TARGET_FILE_DIR:${PROJECT_NAME}>
+        )
+    endif()
 endif()

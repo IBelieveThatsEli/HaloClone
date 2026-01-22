@@ -18,6 +18,8 @@ namespace SDL3
         public:
             EventBridge() = default;
 
+            void Init(void* windowHandle) override {}
+
             void PollEvents() override;
         
         private:
